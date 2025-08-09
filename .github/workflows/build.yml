@@ -2,9 +2,8 @@ name: Build and Push Docker Image
 
 on:
   push:
-    branches: [ main ]
-  pull_request:
     branches:
+      - 'main'
       - 'releases/**'
       - 'feat/**'
 
@@ -14,6 +13,11 @@ jobs:
     steps:
       - name: Check out repository
         uses: actions/checkout@v4
+
+      - name: Generate mocks
+        run: |
+          export PATH=$PATH:$(go env GOPATH)/bin
+          make mocks
 
       - name: Set up Docker Compose
         uses: adambirds/docker-compose-action@v1.5.0

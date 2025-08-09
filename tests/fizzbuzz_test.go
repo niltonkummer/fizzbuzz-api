@@ -2,15 +2,15 @@ package tests
 
 import (
 	"context"
-	config2 "niltonkummer/fizz-buzz/config"
 	"testing"
 
 	"github.com/cucumber/godog"
 	"github.com/go-redis/redis/v8"
+	"github.com/niltonkummer/fizzbuzz-api/config"
 )
 
 func resetRedis() {
-	conf := config2.LoadConfig("../etc/config/")
+	conf := config.LoadConfig("../etc/config/")
 	// Reset Redis database
 	client := redis.NewClient(&redis.Options{
 		Addr: conf.RedisAddress,

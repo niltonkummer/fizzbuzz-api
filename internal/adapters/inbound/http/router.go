@@ -26,6 +26,11 @@ func NewRouter(ctx context.Context) *Router {
 	}
 }
 
+// GetApp returns the Echo application instance
+func (r *Router) GetApp() *echo.Echo {
+	return r.app
+}
+
 // RegisterRoutes registers the HTTP routes for the application
 func (r *Router) RegisterRoutes(handler *Handler) {
 

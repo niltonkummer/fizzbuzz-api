@@ -7,23 +7,24 @@ import (
 	"fmt"
 	"io"
 	"net/http/httptest"
-	config2 "niltonkummer/fizz-buzz/config"
-	"niltonkummer/fizz-buzz/internal/adapters/inbound/http"
-	"niltonkummer/fizz-buzz/internal/adapters/outbound/repository"
-	"niltonkummer/fizz-buzz/internal/domain/model"
-	"niltonkummer/fizz-buzz/internal/prepare"
 	"reflect"
 	"strings"
 
 	"github.com/cucumber/godog"
 	"github.com/go-redis/redis/v8"
+	"github.com/niltonkummer/fizzbuzz-api/config"
+	"github.com/niltonkummer/fizzbuzz-api/internal/adapters/inbound/http"
+	"github.com/niltonkummer/fizzbuzz-api/internal/adapters/outbound/repository"
+	"github.com/niltonkummer/fizzbuzz-api/internal/application"
+	"github.com/niltonkummer/fizzbuzz-api/internal/application/adapters"
+	"github.com/niltonkummer/fizzbuzz-api/internal/domain/model"
 )
 
 type godogsResponseCtxKey struct{}
 
 type apiFeature struct {
 	router *http.Router
-	repo   repository.StatsRepository
+	repo   adapters.StatsRepository
 	body   []byte
 	resp   *httptest.ResponseRecorder
 }
@@ -130,7 +131,7 @@ func (a *apiFeature) theResponseShouldMatchJSON(body *godog.DocString) (err erro
 }
 
 func InitializeScenario(ctx *godog.ScenarioContext) {
-	config := config2.LoadConfig("../etc/config/")
+	config := config.LoadConfig("../etc/config/")
 	redisClient := redis.NewClient(
 		&redis.Options{
 			Addr: config.RedisAddress,
@@ -142,7 +143,7 @@ func InitializeScenario(ctx *godog.ScenarioContext) {
 	repo := repository.NewRedisStatsRepository(redisClient)
 
 	api := &apiFeature{
-		router: prepare.InitServices(context.Background(), repo),
+		router: application.InitServices(context.Background(), repo),
 		repo:   repo,
 	}
 
