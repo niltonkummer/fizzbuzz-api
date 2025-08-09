@@ -71,6 +71,8 @@ The service will start on the port defined in `etc/config/server.dev.env` (defau
     "hits": 42
   }
   ```
+  
+For more details on the API, refer to the OpenAPI documentation or look at [http](http) folder
 
 ## Limitations
 - The param limit for the Fizz-Buzz sequence is set to 500,000 to prevent excessive memory usage.
