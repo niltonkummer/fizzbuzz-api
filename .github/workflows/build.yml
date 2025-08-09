@@ -16,6 +16,7 @@ jobs:
 
       - name: Generate mocks
         run: |
+          export PATH=$PATH:$(go env GOPATH)/bin
           make mocks
 
       - name: Set up Docker Compose
