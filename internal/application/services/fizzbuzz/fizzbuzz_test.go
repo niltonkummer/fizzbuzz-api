@@ -2,10 +2,10 @@ package fizzbuzz
 
 import (
 	"errors"
-	"github.com/niltonkummer/fizzbuzz-api/internal/application/adapters"
 	"testing"
 
-	"github.com/golang/mock/gomock"
+	"github.com/niltonkummer/fizzbuzz-api/internal/application/adapters"
+	"go.uber.org/mock/gomock"
 )
 
 func TestService_GenerateFizzBuzz(t *testing.T) {

@@ -111,20 +111,23 @@ open coverage/coverage.html
 ```
 
 ### BDD (Behavior-Driven Development)
-Feature files and step definitions are in the `tests/` directory. Run BDD tests with:
-
-```sh
-make bdd
-```
+Feature files and step definitions are in the `tests/` directory.
 
 ## Technologies
 - Go (Golang)
+  - [echo](https://echo.labstack.com/) for the web framework
+  - [go-redis](https://github.com/redis/go-redis)
+  - [cucumber](https://github.com/cucumber/godog) for BDD
+  - [viper](https://github.com/spf13/viper) for configuration management
+  - [testify](https://github.com/stretchr/testify) for assertions and mocking
+  - [mockegen](https://go.uber.org/mock/mockgen)
 - Docker & Docker Compose
 - Redis (optional, for stats persistence and for caching)
 - Clean Architecture
 - Go Modules
 - Makefile for automation
-- Ginkgo/Gomega (for BDD)
+- Gherkin for BDD
+
 
 ## Configuration
 - Environment variables are managed in `etc/config/server.${ENV}.env`.

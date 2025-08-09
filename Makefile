@@ -5,7 +5,7 @@ destroy-env: # destroys the local environment
 	docker compose -f docker-compose.yml -p fizz-buzz down --remove-orphans
 
 deps: # installs dependencies
-	go install github.com/golang/mock/mockgen@latest
+	go install go.uber.org/mock/mockgen@latest
 
 generate:
 	go list ./internal/... | xargs -n1 go generate

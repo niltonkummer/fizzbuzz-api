@@ -2,12 +2,12 @@ package stats
 
 import (
 	"errors"
-
 	"testing"
 
-	"github.com/golang/mock/gomock"
 	"github.com/niltonkummer/fizzbuzz-api/internal/application/adapters"
 	"github.com/niltonkummer/fizzbuzz-api/internal/domain/model"
+
+	"go.uber.org/mock/gomock"
 )
 
 func TestStatsService_GetStats(t *testing.T) {
