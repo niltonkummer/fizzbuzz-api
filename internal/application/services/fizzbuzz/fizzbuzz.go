@@ -2,6 +2,7 @@ package fizzbuzz
 
 import (
 	"fmt"
+
 	"github.com/niltonkummer/fizzbuzz-api/internal/application/adapters"
 	"github.com/niltonkummer/fizzbuzz-api/internal/domain/fizzbuzz"
 )
