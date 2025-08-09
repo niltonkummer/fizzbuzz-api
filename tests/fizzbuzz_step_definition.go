@@ -143,8 +143,13 @@ func InitializeScenario(ctx *godog.ScenarioContext) {
 	repo := repository.NewRedisStatsRepository(redisClient)
 
 	api := &apiFeature{
-		router: application.InitServices(context.Background(), repo),
-		repo:   repo,
+		router: application.InitServices(context.Background(), repo, fizzbuzz.WithCache(func() repository.CacheFizzbuzz {
+			if config.UseFizzbuzzCache {
+				return repository.NewCacheRedis(redisClient)
+			}
+			return repository.NewCacheFizzbuzzNoOp()
+		}())),
+		repo: repo,
 	}
 
 	ctx.Before(func(ctx context.Context, sc *godog.Scenario) (context.Context, error) {

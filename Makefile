@@ -1,3 +1,9 @@
+env: # creates and starts the local environment
+	docker compose -f docker-compose.yml -p fizz-buzz up -d redis
+
+destroy-env: # destroys the local environment
+	docker compose -f docker-compose.yml -p fizz-buzz down --remove-orphans
+
 deps: # installs dependencies
 	go install github.com/golang/mock/mockgen@latest
 
