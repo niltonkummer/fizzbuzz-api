@@ -1,0 +1,144 @@
+openapi: 3.0.0
+info:
+  title: FizzBuzzAPI - OpenAPI 3.0
+  description: |-
+    This is a documentation for the FizzBuzzAPI, which is a simple API that returns the FizzBuzz sequence.
+  contact:
+    email: nilton.kummer at gmail.com
+  license:
+    name: MIT License
+    url: https://opensource.org/license/mit/
+  version: 1.0.0
+servers:
+  - url: http://fizzbuzz.vpneasy.info:8081
+tags:
+  - name: fizzbuzz
+    description: Generate FizzBuzz sequence
+paths:
+  /fizzbuzz:
+    post:
+      tags:
+        - fizzbuzz
+      summary: Generate FizzBuzz sequence.
+      description: Generate FizzBuzz sequence based on the input parameters.
+      operationId: fizzbuzzGenerate
+      requestBody:
+        description: Genereate FizzBuzz sequence based on the input parameters.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/FizzBuzzRequest'
+        required: true
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FizzBuzzResponse'
+        '400':
+          description: Invalid parameters
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+  /stats:
+    get:
+      tags:
+        - fizzbuzz
+      summary: Get FizzBuzz statistics.
+      description: Retrieve statistics about the FizzBuzz sequence generation.
+      operationId: fizzbuzzStats
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StatsResponse'
+
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+components:
+  schemas:
+    FizzBuzzRequest:
+      required:
+        - int1
+        - int2
+        - limit
+        - str1
+        - str2
+      type: object
+      properties:
+        int1:
+          type: integer
+          format: int64
+          example: 10
+        int2:
+          type: integer
+          format: int64
+          example: 20
+        limit:
+          type: integer
+          format: int64
+          example: 100
+        str1:
+          type: string
+          example: Fizz
+        str2:
+          type: string
+          example: Buzz
+    FizzBuzzResponse:
+      type: object
+      properties:
+        response:
+          type: string
+          example: "1, 2, Fizz, 4, Buzz, Fizz, 7, 8, Fizz, Buzz, 11, Fizz, 13, 14, FizzBuzz"
+    StatsResponse:
+      type: object
+      properties:
+        int1:
+          type: integer
+          format: int64
+          example: 10
+        int2:
+          type: integer
+          format: int64
+          example: 20
+        limit:
+          type: integer
+          format: int64
+          example: 100
+        str1:
+          type: string
+          example: Fizz
+        str2:
+          type: string
+          example: Buzz
+        hits:
+          type: integer
+          format: int64
+          example: 42
+    Error:
+      type: object
+      properties:
+        code:
+          type: string
+        message:
+          type: string
+      required:
+        - code
+        - message
+  requestBodies:
+    FizzBuzzRequest:
+      description: FizzBuzz request body
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/FizzBuzzRequest'
