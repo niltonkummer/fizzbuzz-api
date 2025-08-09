@@ -80,6 +80,7 @@ The OpenAPI documentation is available at address `localhost:8081`. It provides 
 
 
 [Swagger localhost](http://localhost:8081/)
+[Swagger online](https://docs.vpneasy.info)
 
 
 ## How to Test

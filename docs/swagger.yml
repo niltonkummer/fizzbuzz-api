@@ -10,7 +10,7 @@ info:
     url: https://opensource.org/license/mit/
   version: 1.0.0
 servers:
-  - url: http://fizzbuzz.vpneasy.info:8081
+  - url: https://fizzbuzz.vpneasy.info
 tags:
   - name: fizzbuzz
     description: Generate FizzBuzz sequence
