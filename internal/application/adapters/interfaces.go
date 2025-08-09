@@ -1,10 +1,12 @@
 package adapters
 
+import "github.com/niltonkummer/fizzbuzz-api/internal/domain/model"
+
 //go:generate mockgen -source=interfaces.go -destination=mock_interfaces.go -package=adapters
 
 type StatsRepository interface {
 	// GetMostFrequentRequest returns the most frequent request parameters and their hit count
-	GetMostFrequentRequest() (int1, int2, limit int, str1, str2 string, hits int, err error)
+	GetMostFrequentRequest() (stats *model.StatsResult, err error)
 	// IncrementRequestCount increments the count for a specific request parameters
 	IncrementRequestCount(int1, int2, limit int, str1, str2 string) error
 	// ResetStats resets the statistics data
