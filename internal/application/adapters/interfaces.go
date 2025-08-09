@@ -12,3 +12,8 @@ type StatsRepository interface {
 	// ResetStats resets the statistics data
 	ResetStats() error
 }
+
+type CacheFizzbuzz interface {
+	Get(key string) (string, error)
+	Set(key string, value string) error
+}

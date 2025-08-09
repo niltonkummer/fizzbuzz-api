@@ -72,6 +72,16 @@ The service will start on the port defined in `etc/config/server.dev.env` (defau
   }
   ```
 
+## Limitations
+- The param limit for the Fizz-Buzz sequence is set to 500,000 to prevent excessive memory usage.
+
+## Openapi Documentation
+The OpenAPI documentation is available at address `localhost:8081`. It provides a detailed description of the API endpoints, request/response formats, and examples.
+
+
+[Swagger localhost](http://localhost:8081/)
+
+
 ## How to Test
 
 ### Unit Tests

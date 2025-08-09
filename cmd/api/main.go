@@ -14,6 +14,7 @@ import (
 	"github.com/niltonkummer/fizzbuzz-api/internal/adapters/outbound/repository"
 	"github.com/niltonkummer/fizzbuzz-api/internal/application"
 	"github.com/niltonkummer/fizzbuzz-api/internal/application/adapters"
+	"github.com/niltonkummer/fizzbuzz-api/internal/application/services/fizzbuzz"
 )
 
 var (
@@ -45,7 +46,14 @@ func main() {
 	statsRepo := repository.GetStatsRepository(func() adapters.StatsRepository {
 		return repository.NewRedisStatsRepository(client)
 	})
-	router := application.InitServices(ongoingCtx, statsRepo)
+
+	router := application.InitServices(ongoingCtx, statsRepo,
+		fizzbuzz.WithCache(func() adapters.CacheFizzbuzz {
+			if conf.UseFizzbuzzCache {
+				return repository.NewCacheRedis(client)
+			}
+			return repository.NewCacheFizzbuzzNoOp()
+		}()))
 
 	go func() {
 		if err := router.Start(conf.HTTPServerHost); err != nil && !errors.Is(err, http.ErrServerClosed) {
