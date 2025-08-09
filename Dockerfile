@@ -1,5 +1,7 @@
 FROM golang:1.24-alpine AS builder
 
+RUN apk add --no-cache make
+
 # Set working dir
 WORKDIR /app
 
@@ -14,6 +16,7 @@ RUN go mod download
 COPY . ./
 
 # Build final binary
+RUN make mocks
 RUN CGO_ENABLED=0 go build -ldflags="-s -w" -o /bin/api /app/cmd/api/main.go
 
 # Final stage — smaller image
