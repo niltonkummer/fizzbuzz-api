@@ -1,6 +1,5 @@
 # Fizz-Buzz API Service
 
-[![Test Status](https://github.com/niltonkummer/fizzbuzz-api/actions/workflows/test.yml/badge.svg)](https://github.com/niltonkummer/fizzbuzz-api/actions/workflows/test.yml)
 [![Build Status](https://github.com/niltonkummer/fizzbuzz-api/actions/workflows/build.yml/badge.svg)](https://github.com/niltonkummer/fizzbuzz-api/actions/workflows/build.yml)
 
 ## Introduction
