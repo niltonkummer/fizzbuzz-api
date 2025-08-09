@@ -11,11 +11,9 @@ import (
 
 	"github.com/go-redis/redis/v8"
 	"github.com/niltonkummer/fizzbuzz-api/config"
-	httpIn "github.com/niltonkummer/fizzbuzz-api/internal/adapters/inbound/http"
 	"github.com/niltonkummer/fizzbuzz-api/internal/adapters/outbound/repository"
+	"github.com/niltonkummer/fizzbuzz-api/internal/application"
 	"github.com/niltonkummer/fizzbuzz-api/internal/application/adapters"
-	"github.com/niltonkummer/fizzbuzz-api/internal/application/services/fizzbuzz"
-	"github.com/niltonkummer/fizzbuzz-api/internal/application/services/stats"
 )
 
 var (
@@ -27,17 +25,6 @@ var (
 
 func init() {
 	conf = config.LoadConfig("./etc/config/")
-}
-
-func initServices(ctx context.Context, repo adapters.StatsRepository) *httpIn.Router {
-	fizzBuzzService := fizzbuzz.NewFizzBuzzService(repo)
-	statsService := stats.NewStats(repo)
-
-	handler := httpIn.NewHandler(fizzBuzzService, statsService)
-
-	router := httpIn.NewRouter(ctx)
-	router.RegisterRoutes(handler)
-	return router
 }
 
 func main() {
@@ -58,7 +45,7 @@ func main() {
 	statsRepo := repository.GetStatsRepository(func() adapters.StatsRepository {
 		return repository.NewRedisStatsRepository(client)
 	})
-	router := initServices(ongoingCtx, statsRepo)
+	router := application.InitServices(ongoingCtx, statsRepo)
 
 	go func() {
 		if err := router.Start(conf.HTTPServerHost); err != nil && !errors.Is(err, http.ErrServerClosed) {
