@@ -21,14 +21,9 @@ jobs:
           make mocks
 
       - name: Set up Docker Compose
-        uses: adambirds/docker-compose-action@v1.5.0
-        with:
-          compose-file: ./tests/docker-compose.yml
-          up-flags: --build
-          down-flags: --volumes
-          test-container: test
-          test-command: |
-            go test -v ./internal/...
+        run: |
+          docker compose -f ./tests/docker-compose.yml up --build --abort-on-container-exit
+          docker compose -f ./tests/docker-compose.yml down --volumes
 
   build-and-push:
     runs-on: ubuntu-latest
