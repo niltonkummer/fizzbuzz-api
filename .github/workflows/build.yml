@@ -20,10 +20,11 @@ jobs:
           export PATH=$PATH:$(go env GOPATH)/bin
           make mocks
 
-      - name: Set up Docker Compose
-        run: |
-          docker compose -f ./tests/docker-compose.yml up --build --abort-on-container-exit
-          docker compose -f ./tests/docker-compose.yml down --volumes
+      - name: Start and test with Docker Compose
+        run: docker compose -f ./tests/docker-compose.yml up --build --abort-on-container-exit
+      - name: Teardown Docker Compose
+        if: always()
+        run: docker compose -f ./tests/docker-compose.yml down --volumes
 
   build:
     runs-on: ubuntu-latest
