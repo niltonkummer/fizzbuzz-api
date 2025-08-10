@@ -50,15 +50,12 @@ func (fb *Service) GenerateFizzBuzz(int1, int2, limit int, str1, str2 string) (s
 }
 
 func (fb *Service) calculateFizzBuzzOrGetFromCache(int1, int2, limit int, str1, str2 string) (string, error) {
-	res, err := fb.cache.Get(fmt.Sprintf("%d,%d,%d,%s,%s", int1, int2, limit, str1, str2))
+	res, _ := fb.cache.Get(fmt.Sprintf("%d,%d,%d,%s,%s", int1, int2, limit, str1, str2))
 	if res != "" {
-		if err != nil {
-			return "", fmt.Errorf("error getting from cache: %w", err)
-		}
 		return res, nil
 	}
 
-	res, err = fb.fizzbuzz.Calculate(int1, int2, limit, str1, str2)
+	res, err := fb.fizzbuzz.Calculate(int1, int2, limit, str1, str2)
 	if err != nil {
 		return "", fmt.Errorf("error calculating fizzbuzz: %w", err)
 	}

@@ -5,6 +5,7 @@ import (
 	"errors"
 	"log/slog"
 	"net/http"
+	"os"
 	"os/signal"
 	"syscall"
 	"time"
@@ -15,23 +16,20 @@ import (
 	"github.com/niltonkummer/fizzbuzz-api/internal/application"
 	"github.com/niltonkummer/fizzbuzz-api/internal/application/adapters"
 	"github.com/niltonkummer/fizzbuzz-api/internal/application/services/fizzbuzz"
+	"github.com/niltonkummer/fizzbuzz-api/internal/domain/model"
 )
 
 var (
 	conf     config.Config
 	log      = slog.Default()
 	stopTime = 15 * time.Second // 5 minutes
-
 )
 
 func init() {
-	conf = config.LoadConfig("./etc/config/")
+	conf = config.LoadConfig(os.Getenv("CONFIG_PATH"))
 }
 
-func main() {
-	// Setup signal context
-	mainCtx, stop := signal.NotifyContext(context.Background(), syscall.SIGINT, syscall.SIGTERM)
-	defer stop()
+func Setup(mainCtx context.Context) {
 
 	client := redis.NewClient(&redis.Options{
 		Addr:     conf.RedisAddress,
@@ -44,7 +42,10 @@ func main() {
 
 	ongoingCtx, stopGracefully := context.WithCancel(context.Background())
 	statsRepo := repository.GetStatsRepository(func() adapters.StatsRepository {
-		return repository.NewRedisStatsRepository(client)
+		if repository.StorageType(conf.StorageType) == repository.StorageTypeRedis {
+			return repository.NewRedisStatsRepository(client)
+		}
+		return repository.NewInMemoryStatsRepository(make(map[model.FizzBuzzRequest]int))
 	})
 
 	router := application.InitServices(ongoingCtx, statsRepo,
@@ -72,11 +73,21 @@ func main() {
 	if err := router.Shutdown(stopTimeCtx); err != nil {
 		log.ErrorContext(mainCtx, "Failed to shutdown server", "error", err)
 	}
-	err = client.Close()
-	if err != nil {
-		return
-	}
 	stopGracefully()
 
+	err = client.Close()
+	if err != nil {
+		log.ErrorContext(mainCtx, "Failed to close Redis client", "error", err)
+		return
+	}
+
 	log.InfoContext(mainCtx, "Server shutdown complete")
+}
+
+func main() {
+	// Setup signal context
+	mainCtx, stop := signal.NotifyContext(context.Background(), syscall.SIGINT, syscall.SIGTERM)
+	defer stop()
+
+	Setup(mainCtx)
 }

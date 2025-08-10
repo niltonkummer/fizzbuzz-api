@@ -17,3 +17,13 @@ type CacheFizzbuzz interface {
 	Get(key string) (string, error)
 	Set(key string, value string) error
 }
+
+type FizzBuzzService interface {
+	// GenerateFizzBuzz generates the FizzBuzz sequence for given parameters
+	GenerateFizzBuzz(int1, int2, limit int, str1, str2 string) (string, error)
+}
+
+type StatsService interface {
+	// GetStats returns the statistics of the application
+	GetStats() (*model.StatsResult, error)
+}

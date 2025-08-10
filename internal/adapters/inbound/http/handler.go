@@ -5,17 +5,16 @@ import (
 	"net/http"
 
 	"github.com/labstack/echo/v4"
-	"github.com/niltonkummer/fizzbuzz-api/internal/application/services/fizzbuzz"
-	"github.com/niltonkummer/fizzbuzz-api/internal/application/services/stats"
+	"github.com/niltonkummer/fizzbuzz-api/internal/application/adapters"
 	"github.com/niltonkummer/fizzbuzz-api/internal/domain/model"
 )
 
 type Handler struct {
-	fizzBuzzService *fizzbuzz.Service
-	statsService    *stats.StatsService
+	fizzBuzzService adapters.FizzBuzzService
+	statsService    adapters.StatsService
 }
 
-func NewHandler(fizzBuzz *fizzbuzz.Service, sts *stats.StatsService) *Handler {
+func NewHandler(fizzBuzz adapters.FizzBuzzService, sts adapters.StatsService) *Handler {
 	return &Handler{
 		fizzBuzzService: fizzBuzz,
 		statsService:    sts,
@@ -27,7 +26,10 @@ func (h *Handler) HandleFizzBuzzRequest(ctx echo.Context) error {
 
 	var request model.FizzBuzzRequest
 	if err := ctx.Bind(&request); err != nil {
-		return echo.NewHTTPError(http.StatusBadRequest, "Invalid request format")
+		return ctx.JSON(http.StatusBadRequest, echo.Map{
+			"message": err.Error(),
+			"code":    "invalid_payload",
+		})
 	}
 
 	if err := ctx.Validate(request); err != nil {
@@ -39,7 +41,10 @@ func (h *Handler) HandleFizzBuzzRequest(ctx echo.Context) error {
 
 	response, err := h.fizzBuzzService.GenerateFizzBuzz(request.Int1, request.Int2, request.Limit, request.Str1, request.Str2)
 	if err != nil {
-		return echo.NewHTTPError(http.StatusInternalServerError, "Failed to process FizzBuzz request: "+err.Error())
+		return ctx.JSON(http.StatusInternalServerError, echo.Map{
+			"message": "Failed to generate FizzBuzz response: " + err.Error(),
+			"code":    "internal_error",
+		})
 	}
 
 	resp := model.FizzBuzzResponse{
@@ -56,7 +61,11 @@ func (h *Handler) HandleGetStats(ctx echo.Context) error {
 		if errors.Is(err, model.ErrNoRequestsFound) {
 			return ctx.JSON(http.StatusNotFound, err)
 		}
-		return echo.NewHTTPError(http.StatusInternalServerError, "Failed to get statistics: "+err.Error())
+
+		return ctx.JSON(http.StatusInternalServerError, echo.Map{
+			"message": "Failed to retrieve statistics: " + err.Error(),
+			"code":    "internal_error",
+		})
 	}
 
 	statsResponse := model.StatsResponse{

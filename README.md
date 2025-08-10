@@ -2,6 +2,23 @@
 
 [![Build Status](https://github.com/niltonkummer/fizzbuzz-api/actions/workflows/build.yml/badge.svg)](https://github.com/niltonkummer/fizzbuzz-api/actions/workflows/build.yml)
 
+## Index
+- [Introduction](#introduction)
+- [What it is](#what-it-is)
+- [How to Use](#how-to-use)
+- [Prerequisites](#prerequisites)
+- [Running the Service](#running-the-service)
+- [API Endpoints](#api-endpoints)
+- [Limitations](#limitations)
+- [OpenAPI Documentation](#openapi-documentation)
+- [How to Test](#how-to-test)
+- [Technologies](#technologies)
+- [Configuration](#configuration)
+- [References](#references)
+- [Additional Topics](#additional-topics)
+- [Contributing](#contributing)
+- [License](#license)
+
 ## Introduction
 This project implements a scalable and testable Fizz-Buzz microservice in Go. It provides a RESTful API to generate Fizz-Buzz sequences and track usage statistics, designed for extensibility and production-readiness.
 
@@ -13,6 +30,14 @@ The Fizz-Buzz service exposes endpoints to:
 It is built with clean architecture principles, supports in-memory and Redis-based statistics storage, and is ready for containerized deployment.
 
 ## How to Use
+
+### Prerequisites
+- Go 1.24 or later
+- Docker and Docker Compose (for containerized deployment)
+- To run bare metal, you need:
+  - Go modules enabled
+  - Redis (optional, for statistics persistence), you can run it locally or use a managed service
+  - Make (for automation)
 
 ### Running the Service
 You can run the service locally using Docker Compose:
@@ -33,6 +58,17 @@ Then execute the binary:
 ENV=dev ./fizzbuzz
 ```
 
+If you want to run with in-memory statistics, set the environment variable `STATS_STORAGE` to `in-memory`. For Redis-based statistics, set it to `redis`.
+
+```sh
+ENV=dev STATS_STORAGE=in-memory ./fizzbuzz
+```
+
+for Redis, make sure you have a Redis server running and set the environment variable accordingly:
+
+```sh
+ENV=dev STATS_STORAGE=redis REDIS_ADDRESS={redis_address} ./fizzbuzz
+```
 The service will start on the port defined in `etc/config/server.dev.env` (default: 8080).
 
 ### API Endpoints

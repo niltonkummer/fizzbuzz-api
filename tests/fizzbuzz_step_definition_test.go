@@ -17,6 +17,7 @@ import (
 	"github.com/niltonkummer/fizzbuzz-api/internal/adapters/outbound/repository"
 	"github.com/niltonkummer/fizzbuzz-api/internal/application"
 	"github.com/niltonkummer/fizzbuzz-api/internal/application/adapters"
+	"github.com/niltonkummer/fizzbuzz-api/internal/application/services/fizzbuzz"
 	"github.com/niltonkummer/fizzbuzz-api/internal/domain/model"
 )
 
@@ -143,7 +144,7 @@ func InitializeScenario(ctx *godog.ScenarioContext) {
 	repo := repository.NewRedisStatsRepository(redisClient)
 
 	api := &apiFeature{
-		router: application.InitServices(context.Background(), repo, fizzbuzz.WithCache(func() repository.CacheFizzbuzz {
+		router: application.InitServices(context.Background(), repo, fizzbuzz.WithCache(func() adapters.CacheFizzbuzz {
 			if config.UseFizzbuzzCache {
 				return repository.NewCacheRedis(redisClient)
 			}
