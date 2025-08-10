@@ -100,19 +100,6 @@ Or directly with Go:
 go test ./...
 ```
 
-### Test Coverage
-Generate a coverage report:
-
-```sh
-make coverage
-```
-
-View the HTML report:
-
-```sh
-open coverage/coverage.html
-```
-
 ### BDD (Behavior-Driven Development)
 Feature files and step definitions are in the `tests/` directory.
 
