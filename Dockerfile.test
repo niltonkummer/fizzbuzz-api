@@ -3,10 +3,6 @@ FROM golang:1.24-alpine AS builder
 
 RUN apk add make
 
-## Sonar Scanner
-
-
-
 # Set the working directory inside the container
 WORKDIR /app
 

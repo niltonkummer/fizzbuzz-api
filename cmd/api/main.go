@@ -16,6 +16,7 @@ import (
 	"github.com/niltonkummer/fizzbuzz-api/internal/application"
 	"github.com/niltonkummer/fizzbuzz-api/internal/application/adapters"
 	"github.com/niltonkummer/fizzbuzz-api/internal/application/services/fizzbuzz"
+	"github.com/niltonkummer/fizzbuzz-api/internal/domain/model"
 )
 
 var (
@@ -41,7 +42,10 @@ func Setup(mainCtx context.Context) {
 
 	ongoingCtx, stopGracefully := context.WithCancel(context.Background())
 	statsRepo := repository.GetStatsRepository(func() adapters.StatsRepository {
-		return repository.NewRedisStatsRepository(client)
+		if repository.StorageType(conf.StorageType) == repository.StorageTypeRedis {
+			return repository.NewRedisStatsRepository(client)
+		}
+		return repository.NewInMemoryStatsRepository(make(map[model.FizzBuzzRequest]int))
 	})
 
 	router := application.InitServices(ongoingCtx, statsRepo,

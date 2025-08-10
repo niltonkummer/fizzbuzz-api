@@ -3,9 +3,8 @@ services:
     build:
       context: ..
       dockerfile: ./Dockerfile.test
-    command: >  
+    command: >
       make test
-
     depends_on:
       redis:
         condition: service_healthy

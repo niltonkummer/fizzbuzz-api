@@ -17,7 +17,7 @@ mocks: deps clean-mocks generate
 
 test: mocks
 	@mkdir -p coverage
-	ENV=test CONFIG_PATH=./etc/config REDIS_ADDRESS=:6379 go test -v `go list ./... | grep -vE 'cmd/|config'` -covermode=count -coverprofile coverage/coverage.out
+	ENV=test CONFIG_PATH=./etc/config REDIS_ADDRESS=redis:6379 go test -v `go list ./... | grep -vE 'cmd/|config'` -covermode=count -coverprofile coverage/coverage.out
 	go tool cover -html coverage/coverage.out -o coverage/coverage.html
 
 container-test:

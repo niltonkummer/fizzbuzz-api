@@ -7,6 +7,11 @@ import (
 
 type StorageType string
 
+const (
+	StorageTypeInMemory StorageType = "in-memory"
+	StorageTypeRedis    StorageType = "redis"
+)
+
 func GetStatsRepository(create func() adapters.StatsRepository) adapters.StatsRepository {
 	if create != nil {
 		return create()
