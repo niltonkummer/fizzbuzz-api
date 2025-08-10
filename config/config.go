@@ -16,8 +16,7 @@ type Config struct {
 }
 
 func LoadConfig(path string) Config {
-	os.Getenv("ENV")
-
+	
 	var config Config
 	viper.AddConfigPath(path)
 	viper.SetConfigName(fmt.Sprintf("server.%s.env", os.Getenv("ENV")))

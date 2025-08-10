@@ -12,6 +12,11 @@ import (
 
 var _ adapters.StatsRepository = (*RedisStatsRepository)(nil)
 
+const (
+	// RedisKeyStats is the key used to store statistics in Redis
+	RedisKeyStats = "fizzbuzz:stats"
+)
+
 type RedisStatsRepository struct {
 	client *redis.Client
 }
@@ -25,7 +30,7 @@ func NewRedisStatsRepository(redis *redis.Client) *RedisStatsRepository {
 // GetMostFrequentRequest returns the most frequent request parameters and their hit count
 func (r *RedisStatsRepository) GetMostFrequentRequest() (stats *model.StatsResult, err error) {
 	ctx := r.client.Context()
-	cmd := r.client.ZRevRangeWithScores(ctx, "fizzbuzz:stats", 0, 0)
+	cmd := r.client.ZRevRangeWithScores(ctx, RedisKeyStats, 0, 0)
 	if cmd.Err() != nil {
 		return stats, cmd.Err()
 	}
@@ -68,13 +73,13 @@ func (r *RedisStatsRepository) GetMostFrequentRequest() (stats *model.StatsResul
 func (r *RedisStatsRepository) IncrementRequestCount(int1, int2, limit int, str1, str2 string) error {
 	ctx := r.client.Context()
 	key := fmt.Sprintf("%d,%d,%d,%s,%s", int1, int2, limit, str1, str2)
-	cmd := r.client.ZIncrBy(ctx, "fizzbuzz:stats", 1, key)
+	cmd := r.client.ZIncrBy(ctx, RedisKeyStats, 1, key)
 	return cmd.Err()
 }
 
 // ResetStats resets the statistics data
 func (r *RedisStatsRepository) ResetStats() error {
 	ctx := r.client.Context()
-	cmd := r.client.Del(ctx, "fizzbuzz:stats")
+	cmd := r.client.Del(ctx, RedisKeyStats)
 	return cmd.Err()
 }

@@ -3,9 +3,8 @@ services:
     build:
       context: ..
       dockerfile: ./Dockerfile.test
-    command: >
-      go test -v -coverprofile=coverage/coverage.out -covermode=atomic ./... && \
-        go tool cover -html=coverage/coverage.out -o coverage/coverage.html
+    command: >  
+      make test
 
     depends_on:
       redis:
@@ -15,8 +14,6 @@ services:
       - REDIS_ADDRESS=redis:6379
     volumes:
         - ../:/app:rw
-    networks:
-      - testnet
 
   redis:
     image: redis:latest
@@ -26,10 +23,3 @@ services:
         interval: 1s
         timeout: 10s
         retries: 5
-    networks:
-      - testnet
-
-
-networks:
-  testnet:
-    driver: bridge

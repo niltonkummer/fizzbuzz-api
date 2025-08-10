@@ -68,7 +68,7 @@ func TestStatsService_GetStats(t *testing.T) {
 			fields: fields{
 				repository: func() adapters.StatsRepository {
 					m := adapters.NewMockStatsRepository(ctrl)
-					m.EXPECT().GetMostFrequentRequest().Return(nil, model.ErrNoRequestsFound).Times(1)
+					m.EXPECT().GetMostFrequentRequest().Return(nil, nil).Times(1)
 					return m
 				},
 			},
